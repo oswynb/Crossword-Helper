@@ -1,0 +1,30 @@
+name:                crossword-helper
+version:             0.1.0.0
+synopsis:            Crossword construction helper for Beta Newsletter
+description:         Please see README.md
+homepage:            https://github.com/oswynb/crossword-helper
+license:             BSD3
+license-file:        LICENSE
+author:              Oswyn Brent
+maintainer:          oztastic703@gmail.com
+copyright:           2016 Oswyn Brent
+category:            Other
+build-type:          Simple
+cabal-version:       >=1.10
+
+executable crossword-helper
+  hs-source-dirs:      src
+  main-is:             Main.hs
+  other-modules:       Latex
+                       Lib
+                       Rep
+  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base >= 4.7 && < 5
+                     , array
+                     , process
+                     , split
+  default-language:    Haskell2010
+
+source-repository head
+  type:     git
+  location: https://github.com/oswynb/crossword-helper

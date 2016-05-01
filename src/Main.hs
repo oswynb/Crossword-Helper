@@ -1,26 +1,29 @@
 module Main where
 
-import Rep
-import Latex
-import System.Environment
-import System.Process
-import Data.List.Split
+import           Control.Monad
+import           Data.List.Split
+import           Data.Monoid
+import           System.Environment
+import           System.Process
 
-main :: IO()
+import           Latex
+import           Rep
+
+main :: IO ()
 main = do
-	args <- getArgs
-	let filePath = head args
-	let outputName = head $ tail args
-	rawData <- readFile filePath
-	let blankCrossword = constructCrossword (splitOn "\n" rawData)
-	filledCrossword <- fillAll blankCrossword
-	let puzzleFile = (outputName ++ ".tex")
-	let solutionFile = (outputName ++ "-solution.tex")
+  args <- getArgs
+  if length args < 2 then
+    putStrLn "Usage: crossword-helper $CROSS_FILE $OUTPUT_PREFIX"
+  else do
+    let [filePath, outputName] = args
+    rawData <- readFile filePath
+    let blankCrossword = constructCrossword (splitOn "\n" rawData)
+    filledCrossword <- fillAll blankCrossword
+    let puzzleFile = (outputName ++ ".tex")
+    let solutionFile = (outputName ++ "-solution.tex")
 
-	writeFile puzzleFile (latexUnsolved filledCrossword)
-	writeFile solutionFile (latexSolution filledCrossword)
+    writeFile puzzleFile (latexUnsolved filledCrossword)
+    writeFile solutionFile (latexSolution filledCrossword)
 
-	_ <- system puzzleFile
-	_ <- system solutionFile
-
-	return ()
+    void $ system $ "open " <> puzzleFile
+    void $ system $ "open " <> solutionFile
